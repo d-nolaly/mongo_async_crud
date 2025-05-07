@@ -4,9 +4,7 @@ const app = express();
 const path = require('path');
 const cors = require('cors');
 const corsOptions = require('./config/corsOptions');
-const { logger } = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
-const verifyJWT = require('./middleware/verifyJWT');
 const cookieParser = require('cookie-parser');
 const credentials = require('./middleware/credentials');
 const mongoose = require('mongoose');
@@ -15,6 +13,7 @@ const PORT = process.env.PORT || 3500;
 
 // Connect to MongoDB
 connectDB();
+
 
 // custom middleware logger
 app.use(logger);
@@ -38,16 +37,14 @@ app.use(cookieParser());
 //serve static files
 app.use('/', express.static(path.join(__dirname, '/public')));
 
-// routes
-app.use('/', require('./routes/root'));
-app.use('/register', require('./routes/register'));
-app.use('/auth', require('./routes/auth'));
-app.use('/refresh', require('./routes/refresh'));
-app.use('/logout', require('./routes/logout'));
+// Homepage route
+app.get('/', (req, res) => {
+    res.send('Welcome to the US States API!');
+  });
 
-app.use(verifyJWT);
-app.use('/employees', require('./routes/api/employees'));
-app.use('/users', require('./routes/api/users'));
+// States router
+const statesRouter = require('./routes/api/states');
+app.use('/states', statesRouter);
 
 app.all('*', (req, res) => {
     res.status(404);
