@@ -1,4 +1,4 @@
-const statesData = require('../models/statesData.json');
+const statesData = require('../model/statesData.json');
 const State = require('../model/State'); // Mongoose model
 
 // Helper: merge fun facts from MongoDB
@@ -185,14 +185,13 @@ const deleteFunFact = async (req, res) => {
 };
 
 module.exports = {
-    getAllStates,
     getState,
+    getAllStates,
+    updateFunFact,
+    deleteFunFact,
     getFunFact,
     getCapital,
     getNickname,
     getPopulation,
-    getAdmission,
-    addStateFunFacts,
-    updateFunFact,
-    deleteFunFact
+    getAdmission
 };

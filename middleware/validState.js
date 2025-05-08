@@ -1,4 +1,4 @@
-const statesData = require('../models/statesData.json');
+const statesData = require('../model/statesData.json');
 
 // Create array of valid state codes (e.g., ['KS', 'NE', 'TX', ...])
 const validCodes = statesData.map(state => state.code.toUpperCase());
