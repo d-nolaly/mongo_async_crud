@@ -3,21 +3,22 @@ const router = express.Router();
 const statesController = require('../../controllers/statesController');
 const validateState = require('../../middleware/validState');
 
-// Base GET routes
-router.get('/:state', validateState, statesController.getState);
-
-router.patch('/:state/funfact', validateState, statesController.updateFunFact);
-router.delete('/:state/funfact', validateState, statesController.deleteFunFact);
-
+// GET all states (no validation needed)
 router.get('/', statesController.getAllStates);
-router.get('/:state', statesController.getState);
-router.get('/:state/funfact', statesController.getFunFact);
-router.get('/:state/capital', statesController.getCapital);
-router.get('/:state/nickname', statesController.getNickname);
-router.get('/:state/population', statesController.getPopulation);
-router.get('/:state/admission', statesController.getAdmission);
-router.patch('/:state/funfact', statesController.updateFunFact);
-router.delete('/:state/funfact', statesController.deleteFunFact);
+
+// Routes that need state validation middleware
+router.route('/:state').get(validateState, statesController.getState);
+
+router.route('/:state/funfact')
+    .get(validateState, statesController.getFunFact)
+    .patch(validateState, statesController.updateFunFact)
+    .delete(validateState, statesController.deleteFunFact);
+
+router.get('/:state/capital', validateState, statesController.getCapital);
+router.get('/:state/nickname', validateState, statesController.getNickname);
+router.get('/:state/population', validateState, statesController.getPopulation);
+router.get('/:state/admission', validateState, statesController.getAdmission);
+
+router.post('/:state/funfact', validateState, statesController.addFunFact);
 
 module.exports = router;
-

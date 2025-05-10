@@ -12,37 +12,30 @@ mongoose.set('strictQuery', true);
 const connectDB = require('./config/dbConn');
 const PORT = process.env.PORT || 3500;
 
-// Connect to MongoDB
 connectDB();
 
-// custom middleware logger
-//app.use(logger);
-
-// Handle options credentials check - before CORS!
-// and fetch cookies credentials requirement
 app.use(credentials);
 
-// Cross Origin Resource Sharing
-app.use(cors(corsOptions));
 
-// built-in middleware to handle urlencoded form data
+app.use(cors());
+
+
 app.use(express.urlencoded({ extended: false }));
 
-// built-in middleware for json 
+
 app.use(express.json());
 
-//middleware for cookies
 app.use(cookieParser());
 
-//serve static files
+
+app.get(['/', '/index.html'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
+
+
 app.use('/', express.static(path.join(__dirname, '/public')));
 
-// Homepage route
-app.get('/', (req, res) => {
-    res.send('Welcome to the US States API!');
-  });
 
-// States router
 const statesRouter = require('./routes/api/states');
 app.use('/states', statesRouter);
 
